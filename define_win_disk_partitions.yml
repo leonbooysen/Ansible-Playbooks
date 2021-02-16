@@ -1,0 +1,47 @@
+---
+- name: DEfine Windows Disk partitions
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: retrieve disc information
+      win_disk_facts:
+
+    - name: abort when the disk number does not exist
+      fail:
+        msg: "Disk does not exist. ( disk_number = 2 ) "
+      when: ansible_disks[2] is undefined
+
+    - name: initialize disk
+      win_shell: "Initialize-Disk -Number 2"
+      when: ansible_disks[2].guid is none
+
+    - name: create partition
+      win_partition:
+        drive_letter: "F"
+        partition_size: -1
+        disk_number: "2"
+      when: ansible_disks[2].guid is none
+
+    - name: format disk
+      win_shell: "Format-Volume -DriveLetter F "
+      when: ansible_disks[2].guid is none
+
+    - name: abort when the disk number does not exist
+      fail:
+        msg: "Disk does not exist. ( disk_number = 3 ) "
+      when: ansible_disks[3] is undefined
+
+    - name: initialize disk
+      win_shell: "Initialize-Disk -Number 3"
+      when: ansible_disks[3].guid is none
+
+    - name: create partition
+      win_partition:
+        drive_letter: "G"
+        partition_size: -1
+        disk_number: "3"
+      when: ansible_disks[3].guid is none
+
+    - name: format disk
+      win_shell: "Format-Volume -DriveLetter G "
+      when: ansible_disks[3].guid is none
