@@ -1,9 +1,9 @@
 ---
-- hosts: linuxsysadmins
+- hosts: all
   become: true
   become_method: sudo
   become_user: root
-  remote_user: devops
+  remote_user: centos
 
 
   tasks:
