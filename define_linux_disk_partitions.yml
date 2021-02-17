@@ -43,5 +43,5 @@
         path: "/leon"
         src: "/dev/mapper/vg_leon-lv_leon"
         fstype: "ext4"
-        opts: rw,nosuid,noexec
+        opts: defaults
         state: mounted
