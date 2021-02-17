@@ -1,0 +1,47 @@
+---
+- hosts: linuxsysadmins
+  become: true
+  become_method: sudo
+  become_user: root
+  remote_user: devops
+
+
+  tasks:
+
+    - name: Create the "vdb" Volume group.
+      lvg:
+        pvs: "/dev/vdb"
+        vg: "vg_leon"
+        pesize: "8"
+        pv_options: '-Z y'
+        force: no
+        state: present
+ 
+    - name: Create the "lv_leon" Logical Volume.
+      lvol:
+        vg: "vg_leon"
+        lv: "lv_leon"
+        size: "100%VG"
+        active: yes
+        force: no
+        state: present
+    
+    - name: Create a "ext4" filesystem on lvm "/dev/mapper/vg_leon-lv_leon".
+      filesystem:
+        fstype: "ext4"
+        dev: "/dev/mapper/vg_leon-lv_leon"
+        force: no
+
+    - name: Create a directory to mount the filesystem.
+      file:
+        path: "/leon"
+        state: directory
+        mode: '0755'
+
+    - name: Mount the created "ext4" filesystem.
+      mount:
+        path: "/leon"
+        src: "/dev/mapper/vg_leon-lv_leon"
+        fstype: "ext4"
+        opts: rw,nosuid,noexec
+        state: mounted

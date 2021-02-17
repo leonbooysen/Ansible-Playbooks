@@ -1,0 +1,7 @@
+---
+- name: Rename Local Administartor account
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Rename account
+      win_shell: "Rename-LocalUser -Name 'Administrator' -NewName 'ampere'"
