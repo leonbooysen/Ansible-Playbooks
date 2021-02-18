@@ -1,0 +1,10 @@
+---
+- name: Create New Users
+  hosts: all
+  tasks:
+    - name: Create Users Task
+      user:
+        name: bob
+        state: present
+        password: "{{ 'P@ssword0987' | password_hash('sha512', 'A512') }}"
+        shell: /bin/bash
